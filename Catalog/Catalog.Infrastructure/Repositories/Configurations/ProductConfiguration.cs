@@ -13,9 +13,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Id).HasColumnType("INT").UseIdentityColumn();
         builder.Property(p => p.Name).HasColumnType("NVARCHAR(50)").IsRequired();
         builder.Property(p => p.Description).HasColumnType("NVARCHAR(255)");
-        builder.Property(p => p.Price).HasColumnType("DECIMAL").IsRequired();
-        builder.Property(p => p.Categoria).HasColumnType("NVARCHAR(50)").IsRequired();
-        builder.Property(p => p.Image).HasColumnType("VARBINARY").IsRequired();
+        builder.Property(p => p.Price).HasColumnType("DECIMAL(18, 2)").IsRequired();
+        builder.Property(p => p.Category).HasColumnType("NVARCHAR(50)").IsRequired();
+        builder.Property(p => p.Image).HasColumnType("VARBINARY(MAX)").IsRequired();
         builder.Property(p => p.Stock).HasColumnType("INT").IsRequired();
     }
 }

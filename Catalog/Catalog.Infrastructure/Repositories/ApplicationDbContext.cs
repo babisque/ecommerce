@@ -1,3 +1,4 @@
+using System.Reflection;
 using Catalog.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

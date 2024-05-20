@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240520020524_FirstMigration")]
+    [Migration("20240520144844_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -33,7 +33,7 @@ namespace Catalog.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Categoria")
+                    b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(50)");
 

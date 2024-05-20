@@ -30,7 +30,7 @@ namespace Catalog.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Categoria")
+                    b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(50)");
 
@@ -43,14 +43,14 @@ namespace Catalog.Infrastructure.Migrations
 
                     b.Property<byte[]>("Image")
                         .IsRequired()
-                        .HasColumnType("VARBINARY");
+                        .HasColumnType("VARBINARY(MAX)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(50)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("DECIMAL");
+                        .HasColumnType("DECIMAL(18, 2)");
 
                     b.Property<int>("Stock")
                         .HasColumnType("INT");
