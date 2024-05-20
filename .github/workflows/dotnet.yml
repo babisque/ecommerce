@@ -14,10 +14,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    run:
+    - name: Change the work dir
+      working-directory: ./Catalog
+
     steps:
     - uses: actions/checkout@v4
-    - name: Change Working dir
-      run: cd ./Catalog/
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
