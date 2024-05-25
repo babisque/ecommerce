@@ -25,8 +25,8 @@ namespace Catalog.API.Controllers;
             try
             {
                 using var ms = new MemoryStream();
-                await req.Image.CopyToAsync(ms);
-                
+                if (req.Image != null) await req.Image.CopyToAsync(ms);
+
                 var product = new Product
                 {
                     Name = req.Name,
