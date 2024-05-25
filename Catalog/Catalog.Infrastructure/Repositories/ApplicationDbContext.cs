@@ -7,7 +7,7 @@ namespace Catalog.Infrastructure.Repositories;
 
 public class ApplicationDbContext : DbContext
 {
-    private readonly string _connectionString;
+    private readonly string? _connectionString;
     
     public DbSet<Product> Products { get; set; }
 
@@ -22,7 +22,7 @@ public class ApplicationDbContext : DbContext
         _connectionString = configuration.GetConnectionString("ConnectionString");
     }
 
-    public ApplicationDbContext(string connectionString)
+    public ApplicationDbContext(string? connectionString)
     {
         _connectionString = connectionString;
     }

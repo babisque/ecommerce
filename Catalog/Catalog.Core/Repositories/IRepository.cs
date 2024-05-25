@@ -4,9 +4,9 @@ namespace Catalog.Core.Repositories;
 
 public interface IRepository<T> where T : EntityBase
 {
-    IList<T> GetAll();
-    T GetById(int id);
-    void Create(T entity);
-    void Update(T entity);
-    void Remove(int id);
+    Task<IList<T>> GetAllAsync();
+    Task<T> GetByIdAsync(int id);
+    Task CreateAsync(T entity);
+    Task UpdateAsync(T entity);
+    Task RemoveAsync(int id);
 }

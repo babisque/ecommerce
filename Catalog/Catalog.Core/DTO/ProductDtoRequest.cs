@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Catalog.Core.DTO;
 
-public class ProductDto
+public class ProductDtoRequest
 {
     public string Name { get; set; }
     public string Description { get; set; }

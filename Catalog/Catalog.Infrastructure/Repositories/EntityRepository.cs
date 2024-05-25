@@ -6,37 +6,59 @@ namespace Catalog.Infrastructure.Repositories;
 
 public class EntityRepository<T> : IRepository<T> where T : EntityBase
 {
-    private ApplicationDbContext _context;
+    private readonly ApplicationDbContext _context;
     protected DbSet<T> DbSet;
 
     public EntityRepository(ApplicationDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
         DbSet = _context.Set<T>();
     }
 
-
-    public IList<T> GetAll()
-        => DbSet.ToList();
-
-    public T GetById(int id)
-        => DbSet.FirstOrDefault(e => e.Id == id) ?? throw new Exception("Entity not found");
-
-    public void Create(T entity)
+    public async Task<IList<T>> GetAllAsync()
     {
-        DbSet.Add(entity);
-        _context.SaveChanges();
+        return await DbSet.ToListAsync();
     }
 
-    public void Update(T entity)
+    public async Task<T> GetByIdAsync(int id)
+        => await DbSet.FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("Entity not found");
+
+    public async Task CreateAsync(T entity)
     {
-        DbSet.Update(entity);
-        _context.SaveChanges();
+        try
+        {
+            DbSet.Add(entity);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error creating entity", e);
+        }
     }
 
-    public void Remove(int id)
+    public async Task UpdateAsync(T entity)
     {
-        DbSet.Remove(GetById(id));
-        _context.SaveChanges();
+        try
+        {
+            DbSet.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error updating entity", e);
+        }
+    }
+
+    public async Task RemoveAsync(int id)
+    {
+        try
+        {
+            DbSet.Remove(await GetByIdAsync(id));
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error removing entity", e);
+        }
     }
 }
