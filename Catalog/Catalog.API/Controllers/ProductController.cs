@@ -107,7 +107,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpGet("GetImage/{productId:int}")]
-        public async Task<IActionResult> GetImage([FromRoute] int productId)
+        public IActionResult GetImage([FromRoute] int productId)
         {
             _logger.LogInformation($"GET request received to retrieve image for product ID {productId}.");
 
