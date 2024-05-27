@@ -17,7 +17,14 @@ public class EntityRepository<T> : IRepository<T> where T : EntityBase
 
     public async Task<IList<T>> GetAllAsync()
     {
-        return await DbSet.ToListAsync();
+        try
+        {
+            return await DbSet.ToListAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public async Task<T> GetByIdAsync(int id)

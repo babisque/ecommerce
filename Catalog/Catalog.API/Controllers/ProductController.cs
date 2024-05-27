@@ -1,61 +1,132 @@
 using Catalog.Core.DTO;
 using Catalog.Core.Entities;
+using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Catalog.API.Controllers;
-
+namespace Catalog.API.Controllers
+{
     [ApiController]
     [Route("/[controller]")]
     public class ProductController : ControllerBase
     {
-        
-        // TODO: Logging
-        // TODO: Validations - maybe using FluentValidation
         private readonly IProductRepository _productRepository;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository, ILogger<ProductController> logger)
         {
             _productRepository = productRepository;
+            _logger = logger;
         }
 
         [HttpPost]
         public async Task<ActionResult<Product>> Post([FromForm] ProductDtoRequest req)
         {
+            _logger.LogInformation("POST request received to create a new product.");
+            
             try
             {
-                using var ms = new MemoryStream();
-                if (req.Image != null) await req.Image.CopyToAsync(ms);
-
                 var product = new Product
                 {
                     Name = req.Name,
                     Description = req.Description,
                     Price = req.Price,
                     Category = req.Category,
-                    Image = ms.ToArray(),
+                    Image = req.Image != null ? await GetImageBytesAsync(req.Image) : null,
                     Stock = req.Stock
                 };
+
                 await _productRepository.CreateAsync(product);
-                return CreatedAtAction(nameof(Post), new { product.Id }, product);
+                _logger.LogInformation($"Product created successfully with ID {product.Id}.");
+                return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
             }
             catch (Exception e)
             {
+                CustomLogger.LogFile = true;
+                _logger.LogError(e, "Error occurred while creating a new product.");
                 return BadRequest(new { ErrorMessage = e.Message });
             }
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            IList<ProductDtoResponse> res = new List<ProductDtoResponse>();
-            var products = _productRepository.GetAllAsync();
-            if (products?.Result == null)
-                return NotFound();
-
-            foreach (var product in products.Result)
+            _logger.LogInformation("GET request received to retrieve all products.");
+            try
             {
-                res.Add(new ProductDtoResponse
+                var products = await _productRepository.GetAllAsync();
+                if (products == null || products.Count == 0)
+                {
+                    _logger.LogWarning("No products found.");
+                    return NotFound();
+                }
+
+                var res = new List<ProductDtoResponse>();
+                foreach (var product in products)
+                {
+                    res.Add(new ProductDtoResponse
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Description = product.Description,
+                        Price = product.Price,
+                        Category = product.Category,
+                        Stock = product.Stock,
+                        CreatedAt = product.CreatedAt,
+                        UpdatedAt = product.UpdatedAt
+                    });
+                }
+
+                _logger.LogInformation("Products retrieved successfully.");
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                CustomLogger.LogFile = true;
+                _logger.LogError(e, "Error occurred while retrieving products.");
+                return StatusCode(500, new { ErrorMessage = e.Message });
+            }
+        }
+
+        [HttpGet("GetImage/{productId:int}")]
+        public async Task<IActionResult> GetImage([FromRoute] int productId)
+        {
+            _logger.LogInformation($"GET request received to retrieve image for product ID {productId}.");
+
+            try
+            {
+                var imageBinary = _productRepository.GetImage(productId);
+                if (imageBinary != null)
+                {
+                    _logger.LogInformation($"Image retrieved successfully for product ID {productId}.");
+                    return File(imageBinary, "image/png");
+                }
+
+                _logger.LogWarning($"No image found for product ID {productId}.");
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                CustomLogger.LogFile = true;
+                _logger.LogError(e, $"Error occurred while retrieving image for product ID {productId}.");
+                return StatusCode(500, new { ErrorMessage = e.Message });
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ProductDtoResponse>> GetProduct([FromRoute] int id)
+        {
+            _logger.LogInformation($"GET request received to retrieve product with ID {id}.");
+            try
+            {
+                var product = await _productRepository.GetByIdAsync(id);
+                if (product == null)
+                {
+                    _logger.LogWarning($"Product with ID {id} not found.");
+                    return NotFound();
+                }
+
+                var res = new ProductDtoResponse
                 {
                     Id = product.Id,
                     Name = product.Name,
@@ -65,66 +136,48 @@ namespace Catalog.API.Controllers;
                     Stock = product.Stock,
                     CreatedAt = product.CreatedAt,
                     UpdatedAt = product.UpdatedAt
-                });
-            }
+                };
 
-            return Ok(res);
-        }
-
-        [HttpGet("GetImage/{productId:int}")]
-        public IActionResult GetImage([FromRoute]int productId)
-        {
-            var imageBinary = _productRepository.GetImage(productId);
-            if (imageBinary is not null)
-                return File(imageBinary, "image/png");
-
-            return NoContent();
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductDtoResponse>> GetProduct([FromRoute] int id)
-        {
-            try
-            {
-                var res = new ProductDtoResponse();
-                var product = await _productRepository.GetByIdAsync(id);
-
-                res.Id = product.Id;
-                res.Name = product.Name;
-                res.Description = product.Description;
-                res.Price = product.Price;
-                res.Category = product.Category;
-                res.Stock = product.Stock;
-                res.CreatedAt = product.CreatedAt;
-                res.UpdatedAt = product.UpdatedAt;
-                
+                _logger.LogInformation($"Product with ID {id} retrieved successfully.");
                 return Ok(res);
             }
             catch (Exception e)
             {
-                return NotFound(new { ErrorMessage = e.Message });
+                CustomLogger.LogFile = true;
+                _logger.LogError(e, $"Error occurred while retrieving product ID {id}.");
+                return StatusCode(500, new { ErrorMessage = e.Message });
             }
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Put([FromRoute] int id, [FromBody] ProductDtoUpdate req)
         {
+            _logger.LogInformation($"PUT request received to update product with ID {id}.");
+
             try
             {
                 var product = await _productRepository.GetByIdAsync(id);
+                if (product == null)
+                {
+                    _logger.LogWarning($"Product with ID {id} not found.");
+                    return NotFound();
+                }
 
-                if (req.Name != null) product.Name = req.Name;
-                if (req.Description != null) product.Description = req.Description;
-                if (req.Price != null)product.Price = (decimal)req.Price;
-                if (req.Category != null) product.Category = req.Category;
-                if (req.Stock != null) product.Stock = (int)req.Stock;
+                product.Name = req.Name ?? product.Name;
+                product.Description = req.Description ?? product.Description;
+                product.Price = req.Price ?? product.Price;
+                product.Category = req.Category ?? product.Category;
+                product.Stock = req.Stock ?? product.Stock;
                 product.UpdatedAt = DateTime.Now;
 
                 await _productRepository.UpdateAsync(product);
+                _logger.LogInformation($"Product with ID {id} updated successfully.");
                 return Ok();
             }
             catch (Exception e)
             {
+                CustomLogger.LogFile = true;
+                _logger.LogError(e, $"Error occurred while updating product with ID {id}.");
                 return BadRequest(new { ErrorMessage = e.Message });
             }
         }
@@ -132,15 +185,34 @@ namespace Catalog.API.Controllers;
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
+            _logger.LogInformation($"DELETE request received to delete product with ID {id}.");
+
             try
             {
                 var product = await _productRepository.GetByIdAsync(id);
+                if (product == null)
+                {
+                    _logger.LogWarning($"Product with ID {id} not found.");
+                    return NotFound();
+                }
+
                 await _productRepository.RemoveAsync(product.Id);
+                _logger.LogInformation($"Product with ID {id} deleted successfully.");
                 return Ok();
             }
             catch (Exception e)
             {
-                return NotFound(new { ErrorMessage = e.Message });
+                CustomLogger.LogFile = true;
+                _logger.LogError(e, $"Error occurred while deleting product with ID {id}.");
+                return StatusCode(500, new { ErrorMessage = e.Message });
             }
         }
+
+        private async Task<byte[]> GetImageBytesAsync(IFormFile image)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            return ms.ToArray();
+        }
     }
+}
