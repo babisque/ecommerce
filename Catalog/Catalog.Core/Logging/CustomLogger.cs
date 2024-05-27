@@ -29,7 +29,7 @@ public class CustomLogger : ILogger
         var filePath = Environment.CurrentDirectory + $@"loggin\LOG-{DateTime.Now:yyyy-MM-dd}.txt";
         if (!File.Exists(filePath))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException());
             File.Create(filePath).Dispose();
         }
 
