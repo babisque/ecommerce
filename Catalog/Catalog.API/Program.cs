@@ -1,3 +1,4 @@
+using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
 using Catalog.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+{
+    LogLevel = LogLevel.Information
+}));
+
 builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 {
     opts.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
-}, ServiceLifetime.Scoped);
+});
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
