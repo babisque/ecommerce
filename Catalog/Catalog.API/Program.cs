@@ -1,6 +1,9 @@
+using Catalog.Core.Entities;
 using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
+using Catalog.Core.Validators;
 using Catalog.Infrastructure.Repositories;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +30,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 });
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 
 var app = builder.Build();
 

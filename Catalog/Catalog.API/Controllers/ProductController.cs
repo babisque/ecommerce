@@ -2,6 +2,8 @@ using Catalog.Core.DTO;
 using Catalog.Core.Entities;
 using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Controllers
@@ -12,11 +14,13 @@ namespace Catalog.API.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ILogger<ProductController> _logger;
+        private readonly IValidator<Product> _validator;
 
-        public ProductController(IProductRepository productRepository, ILogger<ProductController> logger)
+        public ProductController(IProductRepository productRepository, ILogger<ProductController> logger, IValidator<Product> validator)
         {
             _productRepository = productRepository;
             _logger = logger;
+            _validator = validator;
         }
 
         [HttpPost]
@@ -35,6 +39,20 @@ namespace Catalog.API.Controllers
                     Image = req.Image != null ? await GetImageBytesAsync(req.Image) : null,
                     Stock = req.Stock
                 };
+                
+                ValidationResult result = await _validator.ValidateAsync(product);
+                if (!result.IsValid)
+                {
+                    
+                    var errors = result.Errors
+                        .GroupBy(e => e.PropertyName)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.Select(e => e.ErrorMessage).ToArray()
+                        );
+                    
+                    return BadRequest(new ValidationProblemDetails(errors));
+                }
 
                 await _productRepository.CreateAsync(product);
                 _logger.LogInformation($"Product created successfully with ID {product.Id}.");
