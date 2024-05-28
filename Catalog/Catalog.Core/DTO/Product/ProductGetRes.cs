@@ -1,6 +1,6 @@
-namespace Catalog.Core.DTO;
+namespace Catalog.Core.DTO.Product;
 
-public class ProductDtoResponse
+public class ProductGetRes
 {
     public int Id { get; set; }
     public string? Name { get; set; }

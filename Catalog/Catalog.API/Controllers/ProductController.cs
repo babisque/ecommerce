@@ -1,4 +1,5 @@
 using Catalog.Core.DTO;
+using Catalog.Core.DTO.Product;
 using Catalog.Core.Entities;
 using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
@@ -24,7 +25,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> Post([FromForm] ProductDtoRequest req)
+        public async Task<ActionResult<Product>> Post([FromBody] ProductPostReq req)
         {
             _logger.LogInformation("POST request received to create a new product.");
             
@@ -36,7 +37,6 @@ namespace Catalog.API.Controllers
                     Description = req.Description,
                     Price = req.Price,
                     Category = req.Category,
-                    Image = req.Image != null ? await GetImageBytesAsync(req.Image) : null,
                     Stock = req.Stock
                 };
                 
@@ -79,10 +79,10 @@ namespace Catalog.API.Controllers
                     return NotFound();
                 }
 
-                var res = new List<ProductDtoResponse>();
+                var res = new List<ProductGetRes>();
                 foreach (var product in products)
                 {
-                    res.Add(new ProductDtoResponse
+                    res.Add(new ProductGetRes
                     {
                         Id = product.Id,
                         Name = product.Name,
@@ -106,33 +106,8 @@ namespace Catalog.API.Controllers
             }
         }
 
-        [HttpGet("GetImage/{productId:int}")]
-        public IActionResult GetImage([FromRoute] int productId)
-        {
-            _logger.LogInformation($"GET request received to retrieve image for product ID {productId}.");
-
-            try
-            {
-                var imageBinary = _productRepository.GetImage(productId);
-                if (imageBinary != null)
-                {
-                    _logger.LogInformation($"Image retrieved successfully for product ID {productId}.");
-                    return File(imageBinary, "image/png");
-                }
-
-                _logger.LogWarning($"No image found for product ID {productId}.");
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                CustomLogger.LogFile = true;
-                _logger.LogError(e, $"Error occurred while retrieving image for product ID {productId}.");
-                return StatusCode(500, new { ErrorMessage = e.Message });
-            }
-        }
-
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductDtoResponse>> GetProduct([FromRoute] int id)
+        public async Task<ActionResult<ProductGetRes>> GetProduct([FromRoute] int id)
         {
             _logger.LogInformation($"GET request received to retrieve product with ID {id}.");
             try
@@ -144,7 +119,7 @@ namespace Catalog.API.Controllers
                     return NotFound();
                 }
 
-                var res = new ProductDtoResponse
+                var res = new ProductGetRes
                 {
                     Id = product.Id,
                     Name = product.Name,
@@ -168,7 +143,7 @@ namespace Catalog.API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put([FromRoute] int id, [FromBody] ProductDtoUpdate req)
+        public async Task<ActionResult> Put([FromRoute] int id, [FromBody] ProductUpdateReq req)
         {
             _logger.LogInformation($"PUT request received to update product with ID {id}.");
 
