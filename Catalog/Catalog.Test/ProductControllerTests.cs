@@ -141,7 +141,7 @@ public class ProductControllerTests
     {
         // Arrange
         _productRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
-            .ReturnsAsync((Product)null);
+            .ReturnsAsync((Product)null!);
 
         // Act
         var result = await _controller.GetProduct(1);
@@ -196,7 +196,7 @@ public class ProductControllerTests
     {
         // Arrange
         _productRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
-            .ReturnsAsync((Product)null);
+            .ReturnsAsync((Product)null!);
 
         // Act
         var result = await _controller.Delete(1);
