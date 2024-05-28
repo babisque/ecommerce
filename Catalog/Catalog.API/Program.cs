@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*builder.Services.AddAutoMapper(typeof());*/
-
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
