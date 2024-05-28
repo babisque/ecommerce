@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Infrastructure", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Core", "Catalog.Core\Catalog.Core.csproj", "{8BB165BC-4495-4D19-848B-E4171E76E12E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Test", "Catalog.Test\Catalog.Test.csproj", "{433F961A-EFEA-4E51-ABD5-26B03E226775}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8BB165BC-4495-4D19-848B-E4171E76E12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BB165BC-4495-4D19-848B-E4171E76E12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BB165BC-4495-4D19-848B-E4171E76E12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{433F961A-EFEA-4E51-ABD5-26B03E226775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{433F961A-EFEA-4E51-ABD5-26B03E226775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{433F961A-EFEA-4E51-ABD5-26B03E226775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{433F961A-EFEA-4E51-ABD5-26B03E226775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
