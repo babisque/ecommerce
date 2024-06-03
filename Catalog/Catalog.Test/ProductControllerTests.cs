@@ -1,5 +1,5 @@
 using Catalog.API.Controllers;
-using Catalog.Core.DTO;
+using Catalog.Core.DTO.Product;
 using Catalog.Core.Entities;
 using Catalog.Core.Repositories;
 using FluentValidation;
@@ -29,14 +29,13 @@ public class ProductControllerTests
     public async Task Post_ValidProduct_ReturnsCreatedResult()
     {
         // Arrange
-        var productDtoRequest = new ProductDtoRequest
+        var productDtoRequest = new ProductPostReq
         {
             Name = "Test Product",
             Description = "Test Description",
             Price = 100,
             Category = "Test Category",
-            Stock = 10,
-            Image = null
+            Stock = 10
         };
 
         var product = new Product
@@ -69,14 +68,13 @@ public class ProductControllerTests
     public async Task Post_InvalidProduct_ReturnsBadRequest()
     {
         // Arrange
-        var productDtoRequest = new ProductDtoRequest
+        var productDtoRequest = new ProductPostReq
         {
             Name = "Test Product",
             Description = "Test Description",
             Price = 100,
             Category = "Test Category",
-            Stock = 10,
-            Image = null
+            Stock = 10
         };
 
         var validationFailures = new List<ValidationFailure>
@@ -114,7 +112,7 @@ public class ProductControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var returnValue = Assert.IsType<List<ProductDtoResponse>>(okResult.Value);
+        var returnValue = Assert.IsType<List<ProductGetRes>>(okResult.Value);
         Assert.Equal(2, returnValue.Count);
     }
     
@@ -132,7 +130,7 @@ public class ProductControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var returnValue = Assert.IsType<ProductDtoResponse>(okResult.Value);
+        var returnValue = Assert.IsType<ProductGetRes>(okResult.Value);
         Assert.Equal(product.Name, returnValue.Name);
     }
     
@@ -155,7 +153,7 @@ public class ProductControllerTests
     {
         // Arrange
         var product = new Product { Id = 1, Name = "Product 1", Price = 100 };
-        var updateDto = new ProductDtoUpdate { Name = "Updated Product", Price = 150 };
+        var updateDto = new ProductUpdateReq { Name = "Updated Product", Price = 150 };
 
         _productRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
             .ReturnsAsync(product);

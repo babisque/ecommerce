@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     private readonly string? _connectionString;
     
     public DbSet<Product> Products { get; set; }
+    public DbSet<ImageData> Images { get; set; }
 
     public ApplicationDbContext()
     {

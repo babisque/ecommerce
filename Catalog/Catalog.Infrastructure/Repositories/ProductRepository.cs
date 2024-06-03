@@ -1,13 +1,20 @@
 using Catalog.Core.Entities;
 using Catalog.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories;
 
 public class ProductRepository(ApplicationDbContext context) : EntityRepository<Product>(context), IProductRepository
 {
-    public byte[]? GetImage(int id)
+    private readonly ApplicationDbContext _context = context;
+
+    public async Task<Product> GetProductByIdAsync(int id)
     {
-        var product = GetByIdAsync(id);
-        return product.Result.Image;
+        var product = await _context.Products
+                          .Include(p => p.Images)
+                          .FirstOrDefaultAsync(p => p.Id == id)
+                      ?? throw new Exception("This product doesn't exist");
+
+        return product;
     }
 }

@@ -29,6 +29,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 var app = builder.Build();
 

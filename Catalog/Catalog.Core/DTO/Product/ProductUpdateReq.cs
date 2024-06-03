@@ -1,6 +1,6 @@
-namespace Catalog.Core.DTO;
+namespace Catalog.Core.DTO.Product;
 
-public class ProductDtoUpdate
+public class ProductUpdateReq
 {
     public string? Name { get; set; }
     public string? Description { get; set; }

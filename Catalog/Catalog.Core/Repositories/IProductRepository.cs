@@ -4,5 +4,5 @@ namespace Catalog.Core.Repositories;
 
 public interface IProductRepository : IRepository<Product>
 {
-    byte[]? GetImage(int id);
+    Task<Product> GetProductByIdAsync(int id);
 }

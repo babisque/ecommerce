@@ -15,7 +15,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Description).HasColumnType("NVARCHAR(255)");
         builder.Property(p => p.Price).HasColumnType("DECIMAL(18, 2)").IsRequired();
         builder.Property(p => p.Category).HasColumnType("NVARCHAR(50)").IsRequired();
-        builder.Property(p => p.Image).HasColumnType("VARBINARY(MAX)").IsRequired();
         builder.Property(p => p.Stock).HasColumnType("INT").IsRequired();
+        builder.HasMany(p => p.Images)
+            .WithOne(i => i.Product)
+            .HasForeignKey(i => i.ProductId);
     }
 }

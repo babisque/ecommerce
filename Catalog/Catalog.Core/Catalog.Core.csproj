@@ -21,5 +21,10 @@
         <HintPath>..\..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
       </Reference>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="DTO\Image\ImageDtoResponse.cs" />
+      <Compile Remove="DTO\Image\ImagesIdRes.cs" />
+    </ItemGroup>
 
 </Project>
