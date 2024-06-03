@@ -122,7 +122,7 @@ public class ProductControllerTests
         // Arrange
         var product = new Product { Id = 1, Name = "Product 1" };
 
-        _productRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
+        _productRepositoryMock.Setup(repo => repo.GetProductByIdAsync(1))
             .ReturnsAsync(product);
 
         // Act
