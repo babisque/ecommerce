@@ -32,4 +32,8 @@
       <ProjectReference Include="..\Catalog.Core\Catalog.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Files\" />
+    </ItemGroup>
+
 </Project>

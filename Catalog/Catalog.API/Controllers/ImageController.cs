@@ -3,6 +3,7 @@ using Catalog.Core.Entities;
 using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using static Catalog.Core.Services.ImageServices;
 
 namespace Catalog.API.Controllers;
 
@@ -20,21 +21,24 @@ public class ImageController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Image>> Post([FromForm] ImagePostReq req)
+    public async Task<ActionResult> Post([FromForm] ImagePostReq req)
     {
         _logger.LogInformation("POST request received to create a new image");
         try
         {
-            var image = new Image
+            if (req.Image != null && !IsImageValid(await GetImageBytesAsync(req.Image)))
+                return BadRequest("Image type not supported");
+            
+            var image = new ImageData
             {
-                Picture = req.Image,
+                ImageBytes = req.Image is not null ? await GetImageBytesAsync(req.Image) : null,
                 ProductId = req.ProductId,
                 CreatedAt = DateTime.Now
             };
             
             await _imageRepository.CreateAsync(image);
             _logger.LogInformation($"Image created successfully with ID {image.Id}.");
-            return CreatedAtAction(nameof(Get), new { id = image.Id }, req);
+            return CreatedAtAction(nameof(GetImageById), new { imageId = image.Id }, image);
         }
         catch (Exception e)
         {
@@ -44,24 +48,27 @@ public class ImageController : ControllerBase
         }
     }
 
-    [HttpGet("{productId:int}")]
-    public async Task<ActionResult<Image>> Get([FromRoute] int productId)
+    [HttpGet("{imageId:int}")]
+    public async Task<ActionResult> GetImageById([FromRoute] int imageId)
     {
-        _logger.LogInformation($"GET request received to retrieve image for product ID {productId}.");
+        _logger.LogInformation($"GET request received to retrieve image with ID {imageId}.");
         try
         {
-            var imageBinary = _imageRepository.GetImageByProductIdAsync(productId).Result.Picture;
-            if (imageBinary is null)
-                return NoContent();
+            var image = await _imageRepository.GetByIdAsync(imageId);
+            if (image.ImageBytes == null)
+            {
+                _logger.LogWarning($"Image with ID {imageId} not found.");
+                return NotFound($"Image not found for ID {imageId}.");
+            }
             
-            _logger.LogInformation($"Image retrieved successfully for product ID {productId}.");
-            return File(imageBinary, "image/png");
+            _logger.LogInformation($"Image with ID {imageId} retrieved successfully.");
+            return File(image.ImageBytes, "image/png");
         }
         catch (Exception e)
         {
             CustomLogger.LogFile = true;
-            _logger.LogError(e, "Error occurred while retrieving images");
-            return NotFound(new { ErrorMessage = e.Message });
+            _logger.LogError(e, $"Error occurred while retrieving image ID {imageId}");
+            return StatusCode(500, new { ErrorMessage = e.Message });
         }
     }
 }

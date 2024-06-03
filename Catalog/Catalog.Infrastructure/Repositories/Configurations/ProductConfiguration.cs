@@ -18,7 +18,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Stock).HasColumnType("INT").IsRequired();
         builder.HasMany(p => p.Images)
             .WithOne(i => i.Product)
-            .HasForeignKey(i => i.ProductId)
-            .IsRequired();
+            .HasForeignKey(i => i.ProductId);
     }
 }

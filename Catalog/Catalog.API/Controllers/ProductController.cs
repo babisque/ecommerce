@@ -112,7 +112,7 @@ namespace Catalog.API.Controllers
             _logger.LogInformation($"GET request received to retrieve product with ID {id}.");
             try
             {
-                var product = await _productRepository.GetByIdAsync(id);
+                var product = await _productRepository.GetProductByIdAsync(id);
                 if (product == null)
                 {
                     _logger.LogWarning($"Product with ID {id} not found.");
@@ -126,6 +126,7 @@ namespace Catalog.API.Controllers
                     Description = product.Description,
                     Price = product.Price,
                     Category = product.Category,
+                    ImagesId = product.Images.Select(i => i.Id).ToList(),
                     Stock = product.Stock,
                     CreatedAt = product.CreatedAt,
                     UpdatedAt = product.UpdatedAt
@@ -199,13 +200,6 @@ namespace Catalog.API.Controllers
                 _logger.LogError(e, $"Error occurred while deleting product with ID {id}.");
                 return StatusCode(500, new { ErrorMessage = e.Message });
             }
-        }
-
-        private async Task<byte[]> GetImageBytesAsync(IFormFile image)
-        {
-            using var ms = new MemoryStream();
-            await image.CopyToAsync(ms);
-            return ms.ToArray();
         }
     }
 }
