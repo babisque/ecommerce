@@ -22,7 +22,7 @@ namespace Catalog.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Catalog.Core.Entities.Image", b =>
+            modelBuilder.Entity("Catalog.Core.Entities.ImageData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,7 +33,7 @@ namespace Catalog.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte[]>("Picture")
+                    b.Property<byte[]>("ImageBytes")
                         .IsRequired()
                         .HasColumnType("VARBINARY(MAX)");
 
@@ -86,7 +86,7 @@ namespace Catalog.Infrastructure.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
-            modelBuilder.Entity("Catalog.Core.Entities.Image", b =>
+            modelBuilder.Entity("Catalog.Core.Entities.ImageData", b =>
                 {
                     b.HasOne("Catalog.Core.Entities.Product", "Product")
                         .WithMany("Images")
