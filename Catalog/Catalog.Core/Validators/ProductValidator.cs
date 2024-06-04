@@ -1,9 +1,9 @@
-using Catalog.Core.Entities;
+using Catalog.Core.DTO.Product;
 using FluentValidation;
 
 namespace Catalog.Core.Validators;
 
-public class ProductValidator : AbstractValidator<Product>
+public class ProductValidator : AbstractValidator<ProductPostReq>
 {
     public ProductValidator()
     {

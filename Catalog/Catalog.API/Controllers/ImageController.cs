@@ -23,7 +23,6 @@ public class ImageController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromForm] ImagePostReq req)
     {
-        _logger.LogInformation("POST request received to create a new image");
         try
         {
             if (req.Image != null && !IsImageValid(await GetImageBytesAsync(req.Image)))
@@ -37,7 +36,6 @@ public class ImageController : ControllerBase
             };
             
             await _imageRepository.CreateAsync(image);
-            _logger.LogInformation($"Image created successfully with ID {image.Id}.");
             return CreatedAtAction(nameof(GetImageById), new { imageId = image.Id }, image);
         }
         catch (Exception e)
@@ -51,17 +49,12 @@ public class ImageController : ControllerBase
     [HttpGet("{imageId:int}")]
     public async Task<ActionResult> GetImageById([FromRoute] int imageId)
     {
-        _logger.LogInformation($"GET request received to retrieve image with ID {imageId}.");
         try
         {
             var image = await _imageRepository.GetByIdAsync(imageId);
             if (image.ImageBytes == null)
-            {
-                _logger.LogWarning($"Image with ID {imageId} not found.");
                 return NotFound($"Image not found for ID {imageId}.");
-            }
             
-            _logger.LogInformation($"Image with ID {imageId} retrieved successfully.");
             return File(image.ImageBytes, "image/png");
         }
         catch (Exception e)
@@ -75,15 +68,11 @@ public class ImageController : ControllerBase
     [HttpDelete("{imageId:int}")]
     public async Task<ActionResult> Delete([FromRoute] int imageId)
     {
-        _logger.LogInformation($"DELETE request received to delete image with ID {imageId}");
         try
         {
             var image = await _imageRepository.GetByIdAsync(imageId);
             if (image.ImageBytes == null)
-            {
-                _logger.LogWarning($"Ïmage with ID {imageId} not found.");
                 return NotFound($"Image not found for ID {imageId}.");
-            }
 
             await _imageRepository.RemoveAsync(image.Id);
             return Ok();

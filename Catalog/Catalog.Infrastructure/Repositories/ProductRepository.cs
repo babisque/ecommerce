@@ -18,4 +18,14 @@ public class ProductRepository(ApplicationDbContext context) : EntityRepository<
 
         return product;
     }
+
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        var products = await _context.Products
+            .Include(p => p.Images)
+            .Include(p => p.Categories)
+            .ToListAsync();
+
+        return products;
+    }
 }

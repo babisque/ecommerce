@@ -1,4 +1,4 @@
-using Catalog.Core.Entities;
+using Catalog.Core.DTO.Product;
 using Catalog.Core.Logging;
 using Catalog.Core.Repositories;
 using Catalog.Core.Validators;
@@ -28,8 +28,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 });
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
+builder.Services.AddScoped<IValidator<ProductPostReq>, ProductValidator>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 
