@@ -36,7 +36,7 @@ namespace Catalog.API.Controllers
                     Name = req.Name,
                     Description = req.Description,
                     Price = req.Price,
-                    Category = req.Category,
+                    Categories = req.Category,
                     Stock = req.Stock
                 };
                 
@@ -88,7 +88,7 @@ namespace Catalog.API.Controllers
                         Name = product.Name,
                         Description = product.Description,
                         Price = product.Price,
-                        Category = product.Category,
+                        Categories = product.Categories,
                         Stock = product.Stock,
                         CreatedAt = product.CreatedAt,
                         UpdatedAt = product.UpdatedAt
@@ -125,7 +125,7 @@ namespace Catalog.API.Controllers
                     Name = product.Name,
                     Description = product.Description,
                     Price = product.Price,
-                    Category = product.Category,
+                    Categories = product.Categories,
                     ImagesId = product.Images.Select(i => i.Id).ToList(),
                     Stock = product.Stock,
                     CreatedAt = product.CreatedAt,
@@ -160,7 +160,7 @@ namespace Catalog.API.Controllers
                 product.Name = req.Name ?? product.Name;
                 product.Description = req.Description ?? product.Description;
                 product.Price = req.Price ?? product.Price;
-                product.Category = req.Category ?? product.Category;
+                product.Categories = req.Categories ?? product.Categories;
                 product.Stock = req.Stock ?? product.Stock;
                 product.UpdatedAt = DateTime.Now;
 

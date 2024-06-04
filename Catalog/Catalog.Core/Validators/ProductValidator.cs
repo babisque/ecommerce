@@ -10,7 +10,6 @@ public class ProductValidator : AbstractValidator<Product>
         RuleFor(p => p.Name).NotEmpty().Length(0, 100);
         RuleFor(p => p.Description).MaximumLength(255);
         RuleFor(p => p.Price).GreaterThan(0);
-        RuleFor(p => p.Category).NotEmpty();
         RuleFor(p => p.Stock).GreaterThanOrEqualTo(0);
     }
 }

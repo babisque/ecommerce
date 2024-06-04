@@ -1,3 +1,5 @@
+using Catalog.Core.Entities;
+
 namespace Catalog.Core.DTO.Product;
 
 public class ProductGetRes
@@ -6,7 +8,7 @@ public class ProductGetRes
     public string? Name { get; set; }
     public string? Description { get; set; }
     public decimal Price { get; set; }
-    public string? Category { get; set; }
+    public List<Category> Categories { get; set; } = new List<Category>();
     public List<int> ImagesId { get; set; } = new List<int>();
     public int Stock { get; set; }
     public DateTime CreatedAt { get; set; }

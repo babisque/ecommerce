@@ -71,4 +71,28 @@ public class ImageController : ControllerBase
             return StatusCode(500, new { ErrorMessage = e.Message });
         }
     }
+
+    [HttpDelete("{imageId:int}")]
+    public async Task<ActionResult> Delete([FromRoute] int imageId)
+    {
+        _logger.LogInformation($"DELETE request received to delete image with ID {imageId}");
+        try
+        {
+            var image = await _imageRepository.GetByIdAsync(imageId);
+            if (image.ImageBytes == null)
+            {
+                _logger.LogWarning($"Ïmage with ID {imageId} not found.");
+                return NotFound($"Image not found for ID {imageId}.");
+            }
+
+            await _imageRepository.RemoveAsync(image.Id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            CustomLogger.LogFile = true;
+            _logger.LogError(e, $"Error ocurred while deleting image ID {imageId}");
+            return BadRequest(new { ErrorMessage = e.Message });
+        }
+    }
 }

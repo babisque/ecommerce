@@ -11,7 +11,8 @@ public class ApplicationDbContext : DbContext
     
     public DbSet<Product> Products { get; set; }
     public DbSet<ImageData> Images { get; set; }
-
+    public DbSet<Category> Categories { get; set; }
+    
     public ApplicationDbContext()
     {
         // comment to migrate
