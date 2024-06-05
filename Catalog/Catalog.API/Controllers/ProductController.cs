@@ -97,7 +97,7 @@ namespace Catalog.API.Controllers
             {
                 CustomLogger.LogFile = true;
                 _logger.LogError(e, "Error occurred while retrieving products.");
-                return StatusCode(500, new { ErrorMessage = e.Message });
+                return BadRequest(new { ErrorMessage = e.Message });
             }
         }
 
@@ -129,7 +129,7 @@ namespace Catalog.API.Controllers
             {
                 CustomLogger.LogFile = true;
                 _logger.LogError(e, $"Error occurred while retrieving product ID {id}.");
-                return StatusCode(500, new { ErrorMessage = e.Message });
+                return BadRequest(new { ErrorMessage = e.Message });
             }
         }
 
