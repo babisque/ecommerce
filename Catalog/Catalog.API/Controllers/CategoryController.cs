@@ -77,9 +77,15 @@ public class CategoryController : ControllerBase
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (String.IsNullOrEmpty(category.Name))
-                return NotFound($"Category not found for ID {categoryId}");
+                return NotFound();
 
-            return Ok(category);
+            var res = new CategoryGetRes
+            {
+                Id = category.Id,
+                Name = category.Name
+            };
+
+            return Ok(res);
         }
         catch (Exception e)
         {
