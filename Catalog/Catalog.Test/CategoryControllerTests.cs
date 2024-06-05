@@ -164,10 +164,6 @@ public class CategoryControllerTests
     {
         // Arrange
         var category = new Category();
-        var categoryReq = new CategoryUpdateReq
-        {
-            Name = "Category"
-        };
         
         _categoryRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
             .ReturnsAsync(category);
