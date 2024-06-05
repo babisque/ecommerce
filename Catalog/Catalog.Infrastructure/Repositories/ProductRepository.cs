@@ -12,9 +12,20 @@ public class ProductRepository(ApplicationDbContext context) : EntityRepository<
     {
         var product = await _context.Products
                           .Include(p => p.Images)
+                          .Include(p => p.Categories)
                           .FirstOrDefaultAsync(p => p.Id == id)
                       ?? throw new Exception("This product doesn't exist");
 
         return product;
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        var products = await _context.Products
+            .Include(p => p.Images)
+            .Include(p => p.Categories)
+            .ToListAsync();
+
+        return products;
     }
 }

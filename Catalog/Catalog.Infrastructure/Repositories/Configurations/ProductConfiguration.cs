@@ -14,10 +14,19 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Name).HasColumnType("NVARCHAR(50)").IsRequired();
         builder.Property(p => p.Description).HasColumnType("NVARCHAR(255)");
         builder.Property(p => p.Price).HasColumnType("DECIMAL(18, 2)").IsRequired();
-        builder.Property(p => p.Category).HasColumnType("NVARCHAR(50)").IsRequired();
         builder.Property(p => p.Stock).HasColumnType("INT").IsRequired();
         builder.HasMany(p => p.Images)
             .WithOne(i => i.Product)
             .HasForeignKey(i => i.ProductId);
+        builder.HasMany(p => p.Categories)
+            .WithMany(c => c.Products)
+            .UsingEntity(
+                "ProductsCategories",
+                l => l.HasOne(typeof(Category)).WithMany().HasForeignKey("CategoryId")
+                    .HasPrincipalKey(nameof(Category.Id)),
+                r => r.HasOne(typeof(Product)).WithMany().HasForeignKey("ProductId")
+                    .HasPrincipalKey(nameof(Product.Id)),
+                j => j.HasKey("ProductId", "CategoryId"));
+
     }
 }
