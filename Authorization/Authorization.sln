@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Core", "Authorization.Core\Authorization.Core.csproj", "{6CA6D5D7-4D9F-4EBA-BA53-CFF82CBE795E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.API", "Authorization.API\Authorization.API.csproj", "{55D5AA64-BB7E-4431-B281-E918B976E5C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Infrastructure", "Authorization.Infrastructure\Authorization.Infrastructure.csproj", "{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CA6D5D7-4D9F-4EBA-BA53-CFF82CBE795E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA6D5D7-4D9F-4EBA-BA53-CFF82CBE795E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA6D5D7-4D9F-4EBA-BA53-CFF82CBE795E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA6D5D7-4D9F-4EBA-BA53-CFF82CBE795E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55D5AA64-BB7E-4431-B281-E918B976E5C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D5AA64-BB7E-4431-B281-E918B976E5C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D5AA64-BB7E-4431-B281-E918B976E5C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D5AA64-BB7E-4431-B281-E918B976E5C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
