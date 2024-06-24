@@ -52,7 +52,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult> GetUserByUsername([FromRoute] string username)
     {
         var user = await _userManager.FindByNameAsync(username);
-        if (user == null)
+        if (user == null || string.IsNullOrEmpty(user.UserName))
             return NotFound($"User {username} not found");
         
         return Ok(user);

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.API", "Author
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Infrastructure", "Authorization.Infrastructure\Authorization.Infrastructure.csproj", "{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Tests", "Authorization.Tests\Authorization.Tests.csproj", "{A3F3CF3B-C08B-4B5A-B663-6EE4362B644E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{178D1341-BAF4-4A7A-A9EE-EBDC4648DFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3F3CF3B-C08B-4B5A-B663-6EE4362B644E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3F3CF3B-C08B-4B5A-B663-6EE4362B644E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3F3CF3B-C08B-4B5A-B663-6EE4362B644E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3F3CF3B-C08B-4B5A-B663-6EE4362B644E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
